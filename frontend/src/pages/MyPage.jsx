@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { useApp } from '../store.jsx';
 import { api } from '../api/index.js';
 import RecipeCard from '../components/RecipeCard.jsx';
-import { findFridge } from '../data/fridges.js';
 import { FridgeI, PlusI, SearchI, UserI } from '../components/Icons.jsx';
 import PrimaryButton from '../components/PrimaryButton.jsx';
 import { FoodPic } from '../components/Pic.jsx';
@@ -12,8 +11,7 @@ import { FoodPic } from '../components/Pic.jsx';
 // 4 마이페이지
 export default function MyPage() {
   const nav = useNavigate();
-  const { user, favorites, following, recent, removeRecent, toast, fridge, unread, isAdmin } = useApp();
-  const myFridge = findFridge(fridge);
+  const { user, favorites, following, recent, removeRecent, toast, selected, unread, isAdmin } = useApp();
   const [profile, setProfile] = useState(null);
   const [mine, setMine] = useState([]);
   const [open, setOpen] = useState('');
@@ -44,7 +42,7 @@ export default function MyPage() {
         <div className="tiles">
           <button className={`tile${open === 'mine' ? ' on' : ''}`} onClick={() => setOpen(open === 'mine' ? '' : 'mine')}><PlusI /><b>내 레시피</b><span>등록한 레시피 {mine.length}개</span></button>
           <button className={`tile${open === 'recent' ? ' on' : ''}`} onClick={() => setOpen(open === 'recent' ? '' : 'recent')}><SearchI /><b>최근 검색어</b><span>{recent.length ? `재료 ${recent.length}개` : '아직 없어요'}</span></button>
-          <button className="tile" onClick={() => nav('/settings')}><FridgeI /><b>냉장고 설정</b><span>{myFridge ? `${myFridge.brand} · ${myFridge.size}` : '모델 선택하기'}</span></button>
+          <button className="tile" onClick={() => nav('/fridge')}><FridgeI /><b>내 냉장고</b><span>{selected.length ? `재료 ${selected.length}개` : '재료 담기'}</span></button>
           <button className="tile" onClick={() => (api.usingSupabase && !user ? nav('/login') : nav('/account'))}><UserI /><b>계정 설정</b><span>닉네임·비밀번호</span></button>
           <button className="tile" onClick={() => nav('/notifications')}><span className="tile-emo">🔔</span><b>알림</b><span>{unread ? `새 알림 ${unread}개` : '새 레시피 소식'}</span></button>
           {isAdmin && <button className="tile admin" onClick={() => nav('/admin')}><span className="tile-emo">🛠️</span><b>관리자 페이지</b><span>신고·레시피·재료·공지</span></button>}

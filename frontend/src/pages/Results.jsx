@@ -24,7 +24,7 @@ export default function Results() {
     <>
       <Header title="추천 요리" right={right} />
       <main className="page">
-        <button className="have-bar" onClick={() => nav('/selected')}>
+        <button className="have-bar" onClick={() => nav('/fridge')}>
           <span className="have-pics">{selected.slice(0, 5).map((id) => { const i = api.ingredient(id); return <IngPic key={id} name={i.name} emoji={i.emoji} />; })}</span>
           <span className="have-tx">내 재료 {selected.length}개로 찾았어요</span><span className="link">수정</span>
         </button>

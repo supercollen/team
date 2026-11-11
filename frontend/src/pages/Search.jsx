@@ -31,7 +31,7 @@ export default function Search() {
 }
 
 // 1-② 재료 검색 (표준 재료 + 별칭 검색, 띄어쓰기로 여러 재료 한 번에 입력)
-function IngredientSearch() {
+export function IngredientSearch({ cta = true, autoFocus = true }) {
   const nav = useNavigate();
   const { selected, setSelected, toggleSelected, recent, addRecent, removeRecent, toast } = useApp();
   const [q, setQ] = useState('');
@@ -75,7 +75,7 @@ function IngredientSearch() {
 
   return (
     <>
-        <label className="search"><SearchI /><input value={q} onChange={(e) => setQ(e.target.value)} onKeyDown={onEnter} placeholder="예: 감자 계란 파" autoFocus /></label>
+        <label className="search"><SearchI /><input value={q} onChange={(e) => setQ(e.target.value)} onKeyDown={onEnter} placeholder="예: 감자 계란 파" autoFocus={autoFocus} /></label>
         {multi ? (
           <div className="notice">띄어쓰기로 여러 재료를 한 번에 넣을 수 있어요. <b>Enter</b>를 누르면 추가돼요.</div>
         ) : (
@@ -115,7 +115,7 @@ function IngredientSearch() {
             ) : <div className="notice warn">'{q}'은(는) 등록되지 않은 재료예요. 다른 이름으로 검색해 보세요.</div>}
           </>
         )}
-        <div className="sticky-cta"><PrimaryButton onClick={() => nav('/selected')}>선택 완료 · {selected.length}개</PrimaryButton></div>
+        {cta && <div className="sticky-cta"><PrimaryButton onClick={() => nav('/fridge')}>내 냉장고 보기 · {selected.length}개</PrimaryButton></div>}
     </>
   );
 }

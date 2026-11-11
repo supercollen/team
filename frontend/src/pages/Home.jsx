@@ -34,12 +34,12 @@ export default function Home() {
         ) : <div className="empty">아직 검색한 재료가 없어요</div>}
       </section>
       <section className="sec">
-        <div className="sec-h"><h2>내 냉장고 <span className="count">{selected.length}</span></h2>{selected.length > 0 && <button className="link" onClick={() => setSelected([])}>모두 지우기</button>}</div>
-        <div className="fridge">
+        <div className="sec-h"><h2>내 냉장고 <span className="count">{selected.length}</span></h2><button className="link" onClick={() => nav('/fridge')}>열기 ›</button></div>
+        <div className="fridge tap" onClick={(e) => !e.target.closest('.rm') && nav('/fridge')} role="button" tabIndex={0} aria-label="내 냉장고 열기" onKeyDown={(e) => e.key === 'Enter' && nav('/fridge')}>
           {selected.map((id) => { const i = api.ingredient(id); return (
             <div key={id} className="fitem"><IngPic name={i.name} emoji={i.emoji} className="ico" /><span className="fname">{i.name}</span><button className="rm" onClick={() => toggleSelected(id)} aria-label={`${i.name} 빼기`}>×</button></div>
           ); })}
-          <button className="fitem add" onClick={() => nav('/search')}><span className="ico">+</span><span className="fname">추가</span></button>
+          <button className="fitem add" onClick={() => nav('/fridge')}><span className="ico">+</span><span className="fname">재료 담기</span></button>
         </div>
       </section>
       {hint && <p className="hint">{hint}</p>}

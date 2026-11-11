@@ -5,8 +5,8 @@ import SystemBanner from './components/SystemBanner.jsx';
 import BottomTab from './components/BottomTab.jsx';
 import Toast from './components/Toast.jsx';
 import Home from './pages/Home.jsx';
+import Fridge from './pages/Fridge.jsx';
 import Search from './pages/Search.jsx';
-import Selected from './pages/Selected.jsx';
 import Results from './pages/Results.jsx';
 import RecipeDetail from './pages/RecipeDetail.jsx';
 const Cook = lazy(() => import('./pages/Cook.jsx'));
@@ -14,7 +14,6 @@ const Register = lazy(() => import('./pages/Register.jsx'));
 const Favorites = lazy(() => import('./pages/Favorites.jsx'));
 const MyPage = lazy(() => import('./pages/MyPage.jsx'));
 const Login = lazy(() => import('./pages/Login.jsx'));
-const Settings = lazy(() => import('./pages/Settings.jsx'));
 const Account = lazy(() => import('./pages/Account.jsx'));
 const Notifications = lazy(() => import('./pages/Notifications.jsx'));
 const Admin = lazy(() => import('./pages/Admin.jsx'));
@@ -31,7 +30,9 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />                       {/* 1-① 홈 */}
         <Route path="/search" element={<Search />} />               {/* 1-② 재료 검색 */}
-        <Route path="/selected" element={<Selected />} />           {/* 1-③ 재료 선택 완료 */}
+        <Route path="/fridge" element={<Fridge />} />               {/* 1-③ 내 냉장고: 재료 선택 + 선택한 재료 */}
+        <Route path="/selected" element={<Navigate to="/fridge" replace />} />
+        <Route path="/settings" element={<Navigate to="/fridge" replace />} />
         <Route path="/results" element={<Results />} />             {/* 1-④ 추천 요리 목록 */}
         <Route path="/recipes/:id" element={<RecipeDetail />} />    {/* 1-⑤ 레시피 상세 */}
         <Route path="/recipes/:id/cook" element={<Cook />} />       {/* 1-⑥ 조리 방법 */}
@@ -39,7 +40,6 @@ export default function App() {
         <Route path="/favorites" element={<Favorites />} />         {/* 3 찜 목록 */}
         <Route path="/my" element={<MyPage />} />                   {/* 4 마이페이지 */}
         <Route path="/login" element={<Login />} />                {/* UC-A01·A02 회원가입·로그인 */}
-        <Route path="/settings" element={<Settings />} />          {/* 설정: 내 냉장고 */}
         <Route path="/notifications" element={<Notifications />} />  {/* UC-F05 레시피 알림 */}
         <Route path="/admin" element={<Admin />} />                  {/* UC-G02 관리자 재료 관리 */}
         <Route path="/account" element={<Account />} />            {/* 계정 설정 */}

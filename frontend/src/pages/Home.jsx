@@ -26,7 +26,7 @@ export default function Home() {
         {unread > 0 && <span className="bell-n">{unread > 9 ? '9+' : unread}</span>}
       </button>
       <div className="brand brand-home"><Logo /><b>냉장고를 부탁해</b><p>냉장고 속 재료로 맛있는 요리를 찾아보세요!</p></div>
-      <button className="search search-home" onClick={() => nav('/search')}><SearchI /><span>어떤 재료가 있나요?</span></button>
+      <button className="search search-home" onClick={() => nav('/fridge')}><SearchI /><span>어떤 재료가 있나요?</span></button>
       <section className="sec">
         <div className="sec-h"><h2>최근 검색어</h2>{recent.length > 0 && <button className="link" onClick={() => removeRecent(null)}>전체 삭제</button>}</div>
         {recent.length ? (

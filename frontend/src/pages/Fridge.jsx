@@ -6,10 +6,20 @@ import Header from '../components/Header.jsx';
 import PrimaryButton from '../components/PrimaryButton.jsx';
 import Modal from '../components/Modal.jsx';
 import { IngPic } from '../components/Pic.jsx';
-import { IngredientSearch } from './Search.jsx';
+import IngredientSearch from '../components/IngredientSearch.jsx';
 
-// 내 냉장고: 위에는 선택한 재료, 아래에서 재료를 검색·분류로 골라 담기 (UC-B01·B02)
+// 내 냉장고 화면 = 검색 탭의 '재료 담기'와 같은 내용 (UC-B01·B02)
 export default function Fridge() {
+  return (
+    <>
+      <Header title="내 냉장고" />
+      <main className="page"><FridgePanel /></main>
+    </>
+  );
+}
+
+// 위에는 내 냉장고(선택한 재료), 아래에서 재료를 검색·분류로 골라 담기. 담으면 바로 냉장고에 반영(로그인 시 DB 저장)
+export function FridgePanel() {
   const nav = useNavigate();
   const { selected, setSelected, toggleSelected, addRecent, toast } = useApp();
   const [clear, setClear] = useState(false);
@@ -19,11 +29,9 @@ export default function Fridge() {
   };
   return (
     <>
-      <Header title="내 냉장고" />
-      <main className="page">
         <section className="sec">
           <div className="sec-h">
-            <h2>선택한 재료 <span className="count">{selected.length}</span></h2>
+            <h2>🧊 내 냉장고 <span className="count">{selected.length}</span></h2>
             {selected.length > 0 && <button className="link" onClick={() => setClear(true)}>모두 지우기</button>}
           </div>
           {selected.length ? (
@@ -40,7 +48,6 @@ export default function Fridge() {
           <IngredientSearch cta={false} autoFocus={false} />
         </section>
         <div className="sticky-cta"><PrimaryButton onClick={recommend}>요리 추천받기{selected.length > 0 && ` · 재료 ${selected.length}개`}</PrimaryButton></div>
-      </main>
       {clear && (
         <Modal onClose={() => setClear(false)}>
           <h3>냉장고를 비울까요?</h3>

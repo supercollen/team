@@ -21,7 +21,10 @@ export function AppProvider({ children }) {
   const [following, setFollowing] = usePersist('following', []);
   const [unread, setUnread] = useState(0);   // 안 읽은 알림 수 (UC-F05)
   const [isAdmin, setIsAdmin] = useState(!api.usingSupabase);
-  const synced = useRef(null);   // DB에 저장된 냉장고 재료 ID (동기화 전 null)
+  const synced = useRef(null);
+  const [fridge, setFridgeLocal] = usePersist('fridge', null); // 냉장고 모델 (설정 > 냉장고 모델, 로그인 시 계정 저장)
+  const fridgeRef = useRef(fridge); fridgeRef.current = fridge;
+  const setFridge = (model) => { setFridgeLocal(model); api.saveFridgeModel(model).catch(() => {}); };   // DB에 저장된 냉장고 재료 ID (동기화 전 null)
   const [toastMsg, setToastMsg] = useState('');
   const timer = useRef();
   const toast = (m) => { setToastMsg(m); clearTimeout(timer.current); timer.current = setTimeout(() => setToastMsg(''), 2200); };
@@ -43,6 +46,7 @@ export function AppProvider({ children }) {
         synced.current = new Set(dbIds);
         setSelected((sel) => [...new Set([...dbIds, ...sel])]);
       }).catch(() => {});
+      api.fridgeModel().then((m) => m !== undefined && (m ? setFridgeLocal(m) : fridgeRef.current && api.saveFridgeModel(fridgeRef.current))).catch(() => {});
     } else { setFavorites([]); synced.current = null; setUnread(0); setIsAdmin(false); }
     if (user) {
       api.isAdmin().then(setIsAdmin).catch(() => {});
@@ -91,7 +95,7 @@ export function AppProvider({ children }) {
   };
 
   return (
-    <Ctx.Provider value={{ ready, user, needLogin, selected, setSelected, toggleSelected, recent, setRecent, addRecent, removeRecent, favorites, toggleFavorite, following, toggleFollow, unread, setUnread, isAdmin, toastMsg, toast }}>
+    <Ctx.Provider value={{ ready, user, needLogin, selected, setSelected, toggleSelected, recent, setRecent, addRecent, removeRecent, favorites, toggleFavorite, following, toggleFollow, fridge, setFridge, unread, setUnread, isAdmin, toastMsg, toast }}>
       {children}
     </Ctx.Provider>
   );

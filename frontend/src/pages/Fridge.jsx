@@ -7,6 +7,7 @@ import PrimaryButton from '../components/PrimaryButton.jsx';
 import Modal from '../components/Modal.jsx';
 import { IngPic } from '../components/Pic.jsx';
 import IngredientSearch from '../components/IngredientSearch.jsx';
+import { findFridge } from '../data/fridges.js';
 
 // 내 냉장고 화면 = 검색 탭의 '재료 담기'와 같은 내용 (UC-B01·B02)
 export default function Fridge() {
@@ -21,7 +22,8 @@ export default function Fridge() {
 // 위에는 내 냉장고(선택한 재료), 아래에서 재료를 검색·분류로 골라 담기. 담으면 바로 냉장고에 반영(로그인 시 DB 저장)
 export function FridgePanel() {
   const nav = useNavigate();
-  const { selected, setSelected, toggleSelected, addRecent, toast } = useApp();
+  const { selected, setSelected, toggleSelected, addRecent, toast, fridge } = useApp();
+  const myFridge = findFridge(fridge);
   const [clear, setClear] = useState(false);
   const recommend = () => {
     if (!selected.length) return toast('재료를 1개 이상 담아 주세요');
@@ -29,6 +31,11 @@ export function FridgePanel() {
   };
   return (
     <>
+        <button className="model-bar" onClick={() => nav('/settings')}>
+          <span className="mb-ic">🏷️</span>
+          <span className="mb-tx">{myFridge ? <><b>{myFridge.brand} {myFridge.size} · {myFridge.type}</b><span>{myFridge.name !== myFridge.type ? myFridge.name + ' · ' : ''}{myFridge.id} · {myFridge.liters}L</span></> : <><b>냉장고 모델을 골라 주세요</b><span>삼성·LG 소형·중형·대형</span></>}</span>
+          <span className="link">{myFridge ? '변경' : '선택'}</span>
+        </button>
         <section className="sec">
           <div className="sec-h">
             <h2>🧊 내 냉장고 <span className="count">{selected.length}</span></h2>

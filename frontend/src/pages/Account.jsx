@@ -6,11 +6,13 @@ import PrimaryButton from '../components/PrimaryButton.jsx';
 import { useApp } from '../store.jsx';
 import { api } from '../api/index.js';
 import { ChevI } from '../components/Icons.jsx';
+import { findFridge } from '../data/fridges.js';
 
 // 계정 설정: 닉네임·비밀번호 변경, 이메일 확인, 내 냉장고, 최근 검색어 삭제, 로그아웃, 회원 탈퇴
 export default function Account() {
   const nav = useNavigate();
-  const { user, recent, removeRecent, toast } = useApp();
+  const { user, recent, removeRecent, toast, fridge } = useApp();
+  const myFridge = findFridge(fridge);
   const [profile, setProfile] = useState(null);
   const [nick, setNick] = useState('');
   const [pw, setPw] = useState({ cur: '', next: '', again: '' });
@@ -75,6 +77,7 @@ export default function Account() {
         </section>
 
         <div className="menu">
+          <button onClick={() => nav('/settings')}><span className="mi">🏷️</span><span>냉장고 모델<small className="sub">{myFridge ? `${myFridge.brand} · ${myFridge.size} ${myFridge.type}` : '아직 선택하지 않았어요'}</small></span><ChevI /></button>
           <button disabled={!recent.length} onClick={() => { removeRecent(null); toast('최근 검색어를 모두 지웠어요'); }}><span className="mi">🔍</span><span>최근 검색어 전체 삭제<small className="sub">{recent.length ? `${recent.length}개 저장됨` : '저장된 검색어가 없어요'}</small></span></button>
         </div>
 

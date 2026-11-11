@@ -14,6 +14,7 @@ const Register = lazy(() => import('./pages/Register.jsx'));
 const Favorites = lazy(() => import('./pages/Favorites.jsx'));
 const MyPage = lazy(() => import('./pages/MyPage.jsx'));
 const Login = lazy(() => import('./pages/Login.jsx'));
+const Settings = lazy(() => import('./pages/Settings.jsx'));
 const Account = lazy(() => import('./pages/Account.jsx'));
 const Notifications = lazy(() => import('./pages/Notifications.jsx'));
 const Admin = lazy(() => import('./pages/Admin.jsx'));
@@ -32,7 +33,7 @@ export default function App() {
         <Route path="/search" element={<Search />} />               {/* 1-② 재료 검색 */}
         <Route path="/fridge" element={<Fridge />} />               {/* 1-③ 내 냉장고: 재료 선택 + 선택한 재료 */}
         <Route path="/selected" element={<Navigate to="/fridge" replace />} />
-        <Route path="/settings" element={<Navigate to="/fridge" replace />} />
+        <Route path="/settings" element={<Settings />} />          {/* 냉장고 모델 선택 (삼성·LG 소형·중형·대형) */}
         <Route path="/results" element={<Results />} />             {/* 1-④ 추천 요리 목록 */}
         <Route path="/recipes/:id" element={<RecipeDetail />} />    {/* 1-⑤ 레시피 상세 */}
         <Route path="/recipes/:id/cook" element={<Cook />} />       {/* 1-⑥ 조리 방법 */}

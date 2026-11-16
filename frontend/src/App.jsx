@@ -15,6 +15,7 @@ const Favorites = lazy(() => import('./pages/Favorites.jsx'));
 const MyPage = lazy(() => import('./pages/MyPage.jsx'));
 const Login = lazy(() => import('./pages/Login.jsx'));
 const Settings = lazy(() => import('./pages/Settings.jsx'));
+const MyRecipes = lazy(() => import('./pages/MyRecipes.jsx'));
 const Account = lazy(() => import('./pages/Account.jsx'));
 const Notifications = lazy(() => import('./pages/Notifications.jsx'));
 const Admin = lazy(() => import('./pages/Admin.jsx'));
@@ -43,6 +44,7 @@ export default function App() {
         <Route path="/login" element={<Login />} />                {/* UC-A01·A02 회원가입·로그인 */}
         <Route path="/notifications" element={<Notifications />} />  {/* UC-F05 레시피 알림 */}
         <Route path="/admin" element={<Admin />} />                  {/* UC-G02 관리자 재료 관리 */}
+        <Route path="/my/recipes" element={<MyRecipes />} />       {/* UC-E03 내 레시피 관리 */}
         <Route path="/account" element={<Account />} />            {/* 계정 설정 */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

@@ -31,7 +31,7 @@ export default function MyPage() {
           )}
         </div>
         {api.usingSupabase && !user && <button className="btn" onClick={() => nav('/login')}>로그인 · 회원가입</button>}
-        <div className="stats"><button onClick={() => nav('/my/recipes')}><b>{mine.length}</b><span>내 레시피</span></button><div><b>{following.length}</b><span>팔로잉</span></div><button onClick={() => nav('/favorites')}><b>{favorites.length}</b><span>찜</span></button></div>
+        <div className="stats"><button onClick={() => nav('/my/recipes')}><b>{mine.length}</b><span>내 레시피</span></button><button onClick={() => nav('/my/following')}><b>{following.length}</b><span>팔로잉</span></button><button onClick={() => nav('/favorites')}><b>{favorites.length}</b><span>찜</span></button></div>
         <p className="tile-cap">내 활동과 설정을 한 번에 관리하세요</p>
         <div className="tiles">
           <button className="tile" onClick={() => nav('/my/recipes')}><PlusI /><b>내 레시피</b><span>등록한 레시피 {mine.length}개</span></button>

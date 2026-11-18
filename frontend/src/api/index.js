@@ -206,6 +206,30 @@ const InteractionService = {
     if (on) must(await sb.from('favorite').insert({ user_id: user.id, recipe_id: recipeId }));
     else must(await sb.from('favorite').delete().eq('user_id', user.id).eq('recipe_id', recipeId));
   },
+  // 팔로잉 목록·업로더 페이지 (UC-F03)
+  async followingIds() {
+    if (!USE_SUPABASE) return null;
+    const user = await UserService.currentUser();
+    if (!user) return null;
+    return must(await sb.from('follow').select('following_id').eq('follower_id', user.id)).map((r) => r.following_id);
+  },
+  async followingList() {
+    if (!USE_SUPABASE) return mock.followingList();
+    const user = await UserService.currentUser();
+    if (!user) return [];
+    const rows = must(await sb.from('follow').select('following_id, profiles!follow_following_id_fkey(id, nickname)').eq('follower_id', user.id).order('follow_id', { ascending: false }));
+    const ids = rows.map((r) => r.following_id);
+    const recs = ids.length ? must(await sb.from('recipe').select('writer_id').in('writer_id', ids)) : [];
+    return rows.map((r) => ({ key: r.following_id, writerId: r.following_id, nickname: r.profiles?.nickname || '알 수 없음', recipes: recs.filter((x) => x.writer_id === r.following_id).length }));
+  },
+  async userPage(key) {
+    if (!USE_SUPABASE) return mock.userPage(key);
+    const p = must(await sb.from('profiles').select('id, nickname').eq('id', key).maybeSingle());
+    if (!p) throw new Error('사용자를 찾을 수 없어요');
+    const recipes = must(await sb.from('recipe').select('*, profiles(nickname)').eq('writer_id', key).order('created_at', { ascending: false })).map(toCard);
+    const { count } = await sb.from('follow').select('follow_id', { count: 'exact', head: true }).eq('following_id', key);
+    return { key: p.id, writerId: p.id, nickname: p.nickname, recipes, followers: count || 0 };
+  },
   async setFollow(writerId, on) {
     if (!USE_SUPABASE || !writerId) return;
     const user = await UserService.currentUser();

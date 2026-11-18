@@ -87,7 +87,7 @@ export default function RecipeDetail() {
         </section>
         <div className="author">
           <div className="avatar">👩‍🍳</div>
-          <div className="who"><b>{r.writer}</b><span className="muted small">레시피 작성자</span></div>
+          <button className="who" onClick={() => nav(`/users/${encodeURIComponent(r.writerId || r.writer)}`)}><b>{r.writer} ›</b><span className="muted small">레시피 작성자</span></button>
           {!mine && <button className={`follow${fol ? ' on' : ''}`} onClick={() => toggleFollow(r.writer, r.writerId)}>{fol ? '팔로잉' : '팔로우'}</button>}
         </div>
         <div className="actions">

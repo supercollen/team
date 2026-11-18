@@ -40,6 +40,7 @@ export function AppProvider({ children }) {
     if (user) {
       api.favoriteIds().then((ids) => ids && setFavorites(ids)).catch(() => {});
       api.recentIds().then((ids) => ids && setRecent(ids)).catch(() => {});
+      api.followingIds().then((ids) => ids && setFollowing(ids)).catch(() => {});
       // 내 냉장고: DB 재료와 이 기기 재료를 합침. 이 기기에만 있던 재료는 아래 효과에서 DB로 올라감
       api.fridgeIds().then((dbIds) => {
         if (!dbIds) return;

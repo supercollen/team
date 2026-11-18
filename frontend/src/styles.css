@@ -593,3 +593,17 @@ body { word-break: keep-all; overflow-wrap: anywhere; }
 .mb-tx { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
 .mb-tx b { font-size: 14.5px; }
 .mb-tx span { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* 팔로잉 · 업로더 페이지 */
+.stats > button { padding: 0; }
+.fl-list { display: flex; flex-direction: column; gap: 8px; }
+.fl-row { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 16px; background: #fff; box-shadow: var(--shadow); }
+.fl-main { flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px; text-align: left; }
+.fl-main svg { width: 18px; height: 18px; color: var(--muted); }
+.fl-tx { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.fl-tx b { font-size: 15px; } .fl-tx span { font-size: 12.5px; color: var(--muted); }
+.avatar.sm { width: 40px; height: 40px; font-size: 20px; flex: none; }
+.up-head { display: flex; align-items: center; gap: 14px; padding: 16px; border-radius: 20px; background: #fff; box-shadow: var(--shadow); }
+.up-tx { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.up-tx b { font-size: 18px; } .up-tx span { font-size: 13px; color: var(--muted); }
+.author .who { text-align: left; padding: 0; }

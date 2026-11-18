@@ -96,6 +96,16 @@ export const mock = {
     return wait({ recipeId: r.id });
   },
   // 체험 모드 신고·관리자 (이 기기에만 저장)
+  // 체험 모드: 업로더를 닉네임으로 구분
+  followingList: () => {
+    let keys = []; try { keys = JSON.parse(localStorage.getItem('fridge_following') || '[]'); } catch { /* 무시 */ }
+    return wait(keys.map((k) => ({ key: k, writerId: null, nickname: k, recipes: allRecipes().filter((r) => r.writer === k).length })));
+  },
+  userPage: (key) => {
+    const rs = allRecipes().filter((r) => r.writer === key);
+    if (!rs.length) return Promise.reject(new Error('사용자를 찾을 수 없어요'));
+    return wait({ key, writerId: null, nickname: key, followers: 0, recipes: rs.map((r) => ({ ...card(r), views: r.views, saves: r.saves ?? 0, writer: r.writer })) });
+  },
   report: (targetType, targetId, reason) => {
     const all = ls('reports');
     if (all.some((x) => x.targetType === targetType && x.targetId === targetId && x.reporterId === 'me')) return Promise.reject(new Error('이미 신고한 게시물이에요'));

@@ -40,7 +40,15 @@ export default function RecipeDetail() {
   const [reason, setReason] = useState('부적절한 내용');
   const [deleting, setDeleting] = useState(false);
   const [zoom, setZoom] = useState(null);
-  useEffect(() => { api.getRecipe(id).then((d) => { setR(d); setServ(d.servings); }).catch((e) => toast(e.message)); }, [id]);
+  const [loadErr, setLoadErr] = useState('');
+  useEffect(() => { setLoadErr(''); api.getRecipe(id).then((d) => { if (!d) throw new Error('레시피를 찾을 수 없어요'); setR(d); setServ(d.servings); }).catch((e) => setLoadErr(/찾을 수 없|not found|P0002|PGRST116/i.test(e.message) ? '레시피를 찾을 수 없어요' : e.message || '레시피를 불러오지 못했어요')); }, [id]);
+  if (loadErr) return (
+    <><Header title="" /><main className="page"><div className="crash" role="alert" style={{ minHeight: '50vh' }}>
+      <div className="ic">🍳</div><h2>{loadErr}</h2><p>삭제되었거나 숨김 처리된 레시피일 수 있어요.</p>
+      <button className="btn" onClick={() => nav('/', { replace: true })}>홈으로</button>
+      <button className="link" onClick={() => nav('/search?tab=recipe')}>다른 레시피 찾기</button>
+    </div></main></>
+  );
   if (!r) return <><Header title="" /><main className="page"><div className="sk sk-hero" /><div className="sk" style={{ height: 26, width: '55%' }} /><div className="sk" style={{ height: 70 }} /><div className="sk" style={{ height: 180 }} /></main></>;
   const fav = favorites.includes(r.recipeId), fol = following.includes(r.writerId || r.writer);
   const mine = r.writer === '나' || (user && user.id === r.writerId);

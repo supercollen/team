@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { api } from '../api/index.js';
 
 // UC-N06 가용성: ① 점검 사전 공지 (public/notice.json) ② 인터넷 연결 끊김 안내
@@ -7,6 +7,7 @@ import { api } from '../api/index.js';
 // 공지 방법: 관리자 페이지 > 공지, 또는 GitHub에서 frontend/public/notice.json 의 active 를 true 로, message·until 을 바꿔 저장하면 자동 배포 후 모든 사용자에게 표시
 export default function SystemBanner() {
   const { pathname } = useLocation();
+  const nav = useNavigate();
   const isHome = pathname === '/';
   const [notice, setNotice] = useState(null);
   const [online, setOnline] = useState(navigator.onLine);
@@ -28,7 +29,7 @@ export default function SystemBanner() {
     <>
       {!online && <div className="sys-banner error" role="alert"><b>📡</b><span>인터넷 연결이 끊겼어요. 연결되면 자동으로 다시 불러와요.</span></div>}
       {isHome && notice && hidden !== notice.message && (
-        <div className={`sys-banner ${notice.level || 'warn'}`} role="status"><b>📢</b><span>{notice.message}</span><button onClick={hide} aria-label="공지 닫기">×</button></div>
+        <div className={`sys-banner ${notice.level || 'warn'}`} role="status"><b>📢</b><span className="sys-link" role="link" tabIndex={0} onClick={() => nav('/notifications?tab=notice')} onKeyDown={(e) => e.key === 'Enter' && nav('/notifications?tab=notice')}>{notice.message}</span><button onClick={hide} aria-label="공지 닫기">×</button></div>
       )}
     </>
   );

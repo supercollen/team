@@ -52,7 +52,22 @@ export default function RecipeDetail() {
   if (!r) return <><Header title="" /><main className="page"><div className="sk sk-hero" /><div className="sk" style={{ height: 26, width: '55%' }} /><div className="sk" style={{ height: 70 }} /><div className="sk" style={{ height: 180 }} /></main></>;
   const fav = favorites.includes(r.recipeId), fol = following.includes(r.writerId || r.writer);
   const mine = r.writer === '나' || (user && user.id === r.writerId);
-  const share = () => navigator.clipboard?.writeText(`${r.title} 레시피 · 냉장고를 부탁해`).then(() => toast('레시피 이름을 복사했어요')).catch(() => toast('복사할 수 없는 환경이에요'));
+  // 공유: 폰에서는 공유 창(카카오톡·문자 등)을 열고, 안 되면 레시피 주소를 복사
+  const share = async () => {
+    const url = `${window.location.origin}/recipes/${r.recipeId}`;
+    const text = `${r.title} 레시피 · 냉장고를 부탁해`;
+    if (navigator.share) {
+      try { await navigator.share({ title: text, text, url }); return; }
+      catch (e) { if (e?.name === 'AbortError') return; }
+    }
+    try { await navigator.clipboard.writeText(url); }
+    catch {
+      const t = document.createElement('textarea'); t.value = url; t.setAttribute('readonly', ''); t.style.position = 'fixed'; t.style.opacity = '0';
+      document.body.appendChild(t); t.select(); const ok = document.execCommand('copy'); t.remove();
+      if (!ok) return toast('복사할 수 없는 환경이에요');
+    }
+    toast('레시피 주소를 복사했어요. 원하는 곳에 붙여 넣어 공유하세요');
+  };
   const removeRecipe = async () => {
     try { await api.deleteRecipe(r.recipeId, r.mainPhoto); toast('레시피를 삭제했어요'); nav('/my', { replace: true }); }
     catch (e) { toast(e.message); setDeleting(false); }
